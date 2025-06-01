@@ -225,11 +225,12 @@ if ($config.meta.version -lt $server.meta.version) {
     w('<darkgray>.\mods<yellow> => ')
     $c='yellow';$p=''
 
+    md "$($cwd)\mods"
     $t='https://api.github.com/repos/ttewi/bloxstrap_teipatch/contents/mods'
     foreach ($t in (((iwr ($t) -usebasicparsing).content)|convertfrom-json).getenumerator()) {
         $c='cyan';$p=' '
         $h=$t.name
-        $io::writealllines("$($cwd)\mods\"+$h,$wc.downloadstring($t.download_url),$utf8)
+        $io::writealllines(("$($cwd)\mods\"+$h),$wc.downloadstring($t.download_url),$utf8)
         w('<gray>'+$h+' ')
     }
     w('<'+$c+'>'+$p+[char]0x25a0+'\n')
@@ -257,7 +258,7 @@ if(!($args[0] -gt 0)){
     start -windowstyle normal -filepath "powershell.exe" -argumentlist @(
         "-Executionpolicy bypass",
         (
-            '-command "&{& \""'+$($cwd)+'\teipatch.ps1\"" \""\"" \""8\""}"'
+            '-file "'+$cwd+'\teipatch.ps1" "" "8"'
         )
     )
 }
