@@ -243,7 +243,7 @@ $io::writealllines('.\config.json',(json($config)))
 $io::writealllines('.\settings.json',(json($settings)))
 
 
-pause
+#pause
 $m.close()
 #if(!($args[0] -gt 0)){& "$($cwd)\teipatch.ps1" "" "8"}
 
