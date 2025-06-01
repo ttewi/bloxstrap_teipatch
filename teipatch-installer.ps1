@@ -89,7 +89,7 @@ getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) 
 
 #/ $td
 
-    $td="$($pwd)\bloxstrap"
+    $td="$($pwd)"
     if (!(test-path -path $td)) {
         $td="$($env:localappdata)\bloxstrap"
         #$td+='\a'
