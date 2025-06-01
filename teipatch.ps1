@@ -1,7 +1,9 @@
 ﻿#$host.ui.rawui.BackgroundColor="Black";
 
 # 27 13
-mode concols=27lines=13;cd $psscriptroot;
+$cwd=($pwd).path
+
+mode concols=27lines=13;cd $cwd;
 $n=[console]::title=$myinvocation.mycommand;
 if(!($mutex=[threading.mutex]::new(1,'て'+$n)).waitone(0)){return};
 
@@ -45,7 +47,7 @@ w('<gray> ╔══════════════════════�
 $io=[io.file]
 $utf8=[System.Text.Encoding]::UTF8
 
-(ls '.\mods').Name|%{&".\mods\$($_)" "$($args[0])"}
+(ls "$($cwd)\mods").Name|%{&"$($cwd)\mods\$($_)" "$($args[0])"}
 & '.\BloxStrap.exe' -player "$($args[0])"
 $($args[0])>.\Logs\uri.txt
 
