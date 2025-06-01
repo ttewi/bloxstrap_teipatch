@@ -27,8 +27,8 @@ function w($s) {
     return #$t
 }
 
-function iex2($s,$w='minimized') {
-    start -windowstyle $w -filepath "powershell" -argumentlist @(
+function iex2($s, $w='hidden') {
+    start -windowstyle ($w) -filepath "powershell" -argumentlist @(
         "-Executionpolicy bypass",
         "-NoProfile",
         #"-windowstyle minimized",
@@ -46,7 +46,7 @@ $io=[io.file]
 $utf8=[System.Text.Encoding]::UTF8
 
 (ls '.\mods').Name|%{&".\mods\$($_)" "$($args[0])"}
-& '.\BloxStrap.exe' -player "$($args[0])"
+#& '.\BloxStrap.exe' -player "$($args[0])"
 $($args[0])>.\Logs\uri.txt
 
 
@@ -61,12 +61,13 @@ if($args[1] -gt 0){for($i=0;$i -lt 1;){$t=(read-host)}}
 $n=$myinvocation.mycommand
 iex2(@"
 if(!(`$m=[threading.mutex]::new(1,'て$($n)')).waitone(8000)){return}
+& "$($pwd)\teipatch-installer.ps1" "8"
 #pause
-& ".\teipatch-installer.ps1" "8"
-#pause
-"@,'normal')
+"@)
+
 
 $mutex.close()
+
 
 
 #& ".\teipatch-installer.ps1" "8"
