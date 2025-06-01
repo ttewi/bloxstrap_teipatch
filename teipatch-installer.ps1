@@ -245,6 +245,6 @@ $io::writealllines('.\settings.json',(json($settings)))
 
 #pause
 $m.close()
-#if(!($args[0] -gt 0)){& "$($cwd)\teipatch.ps1" "" "8"}
+if(!($args[0] -gt 0)){& "$($cwd)\teipatch.ps1" "" "8"}
 
 return
