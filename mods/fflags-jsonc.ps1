@@ -46,7 +46,7 @@ $config=(k(gc -raw -path '.\config.json'))
 $t=$config.fflagsJsoncLocation
 if(($t -eq $null) -or (!(test-path -path $t))) {
     $config.fflagsJsoncLocation='.\fflags.jsonc';
-    $io::writealllines('.\config.json',(json($config)),$utf8);
+    $io::writealllines('.\config.json',(json($config)));
 }
 
 $t=$config.fflagsJsoncLocation
@@ -54,7 +54,7 @@ if(!(test-path -path $t)){w(' <red>!! <white>[<yellow>'+$myinvocation.mycommand+
 
 
 $n=k((gc -raw -Path $t)-replace'(?m)(?<=^([^"]|"[^"]*")*)//.*'-replace'(?ms)/\*.*?\*/')
-$io::writealllines('.\Modifications\ClientSettings\ClientAppSettings.json',(json($n)),$utf8)
+$io::writealllines('.\Modifications\ClientSettings\ClientAppSettings.json',(json($n)))
 
 
 
