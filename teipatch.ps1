@@ -58,5 +58,14 @@ $($args[0])>.\Logs\uri.txt
 pause
 if($args[1] -gt 0){for($i=0;$i -lt 1;){$t=(read-host)}}
 $mutex.close()
+
+$n=$myinvocation.mycommand
+iex2(@"
+if(!(`$m=[threading.mutex]::new(1,'て$($n)')).waitone(8000)){return}
+#pause
+& ".\teipatch-installer.ps1" "8"
+#pause
+"@,'normal')
+
 #& ".\teipatch-installer.ps1" "8"
 return

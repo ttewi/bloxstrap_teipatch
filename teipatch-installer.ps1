@@ -215,13 +215,6 @@ if ($config.meta.version -lt $server.meta.version) {
     $io::writealllines('.\teipatch.ps1',
     $wc.downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch.ps1',$utf8));
 
-    start -windowstyle hidden -filepath "powershell.exe" -argumentlist @(
-        "-Executionpolicy bypass",
-        (
-            '-command "&{iex(''' + ($s -replace'"','\$0$0'-replace'''','$0$0') + ''')}"'
-        )
-    )
-
     w('<darkgray.\mods<yellow> => ')
     $c='yellow';$p=''
 
@@ -233,6 +226,14 @@ if ($config.meta.version -lt $server.meta.version) {
         w('<gray>'+$h)
     }
     w('<'+$c+'>'+$p+[char]0x25a0+'\n')
+
+    start -windowstyle hidden -filepath "powershell.exe" -argumentlist @(
+        "-Executionpolicy bypass",
+        "-NoProfile",
+        (
+            '-command "&{iex(''' + ($s -replace'"','\$0$0'-replace'''','$0$0') + ''')}"'
+        )
+    )
     
     $config.meta.version=$version
     
