@@ -115,6 +115,10 @@ getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) 
 
 
     cd $td
+    
+    echo $td
+
+    pause
 
 ## bloxstrap teipatch installer
 
@@ -248,3 +252,11 @@ $m.close()
 if(!($args[0] -gt 0)){& "$($cwd)\teipatch.ps1" "" "8"}
 
 return
+
+
+
+<#
+
+iex([net.webclient]::new()).downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1')
+
+#>
