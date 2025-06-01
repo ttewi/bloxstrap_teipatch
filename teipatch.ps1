@@ -1,4 +1,4 @@
-﻿$host.ui.rawui.BackgroundColor="Black";
+﻿#$host.ui.rawui.BackgroundColor="Black";
 
 # 27 13
 mode concols=27lines=13;cd $psscriptroot;
