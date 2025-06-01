@@ -1,4 +1,4 @@
-
+﻿
 <#
 iex2(@"
 [console]::title='* $($n-replace'(?<=.*)\..*$','')\multi'
@@ -73,3 +73,4 @@ start powershell -windowstyle hidden {
 w(' <white>[<cyan>'+$myinvocation.mycommand+'<white>]\n')
 
 return
+

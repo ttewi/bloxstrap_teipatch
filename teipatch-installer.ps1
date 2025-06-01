@@ -1,4 +1,4 @@
-
+﻿
 <#
 if (!([security.principal.windowsprincipal][security.principal.windowsidentity]::
 getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) {
@@ -120,6 +120,7 @@ getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) 
 
 
 $io=[io.file]
+$utf8=[System.Text.Encoding]::UTF8
 $cwd=($pwd).path
 $wc=([System.Net.WebClient]::new())
 $ce=(test-path -path '.\config.json')
@@ -127,8 +128,8 @@ $server=k($wc.downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_
 
 
 #? config
-if($ce -eq $false){$io::writealllines('.\config.json',(json(@{})))};
-$config=(k(gc -path '.\config.json'))
+if($ce -eq $false){$io::writealllines('.\config.json',(json(@{})),$utf8)};
+$config=(k(gc -raw -path '.\config.json'))
 if(!($config.containskey('meta'))){$config.meta=@{version=0}}
 
 
@@ -163,7 +164,7 @@ if(!($config.containskey('meta'))){$config.meta=@{version=0}}
 
 
 #/ settings
-    $settings=(k(gc -path '.\settings.json'))
+    $settings=(k(gc -raw -path '.\settings.json'))
 
     $s='teipatch'
     $t=$null
@@ -200,18 +201,21 @@ $s=@"
 if(!(`$m=[threading.mutex]::new(1,'て$($name)')).waitone(8000)){return}
 #pause
 [io.file]::writealllines('$($cwd)\teipatch-installer.ps1',
-([System.Net.WebClient]::new()).downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1'))
-pause
+([System.Net.WebClient]::new()).downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1',[System.Text.Encoding]::UTF8))
+#pause
 "@
 
 #$config.meta.version=0
 
+w('<darkgray>$config.meta.version <yellow>@ '+$config.meta.version+"\n")
+
+
 if ($config.meta.version -lt $server.meta.version) {
 
     $io::writealllines('.\teipatch.ps1',
-    $wc.downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch.ps1'));
+    $wc.downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch.ps1',$utf8));
 
-    start -windowstyle normal -filepath "powershell.exe" -argumentlist @(
+    start -windowstyle hidden -filepath "powershell.exe" -argumentlist @(
         "-Executionpolicy bypass",
         (
             '-command "&{iex(''' + ($s -replace'"','\$0$0'-replace'''','$0$0') + ''')}"'
@@ -225,7 +229,7 @@ if ($config.meta.version -lt $server.meta.version) {
     foreach ($t in (((iwr ($t) -usebasicparsing).content)|convertfrom-json).getenumerator()) {
         $c='red';$p=' '
         $h=$t.name
-        $io::writealllines('.\mods\'+$h,$wc.downloadstring($t.download_url))
+        $io::writealllines('.\mods\'+$h,$wc.downloadstring($t.download_url),$utf8)
         w('<gray>'+$h)
     }
     w('<'+$c+'>'+$p+[char]0x25a0+'\n')
@@ -238,7 +242,7 @@ $io::writealllines('.\config.json',(json($config)))
 $io::writealllines('.\settings.json',(json($settings)))
 
 
-#pause
+pause
 $m.close()
 #if(!($args[0] -gt 0)){& "$($cwd)\teipatch.ps1" "" "8"}
 
