@@ -195,9 +195,6 @@ si -path 'Registry::HKCR\roblox-player\shell\open\command' -value ('cmd /cstart/
 
 
 
-$io::writealllines('.\config.json',(json($config)))
-$io::writealllines('.\settings.json',(json($settings)))
-
 
 $s=@"
 if(!(`$m=[threading.mutex]::new(1,'て$($name)')).waitone(8000)){return}
@@ -206,6 +203,8 @@ if(!(`$m=[threading.mutex]::new(1,'て$($name)')).waitone(8000)){return}
 ([System.Net.WebClient]::new()).downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1'))
 pause
 "@
+
+#$config.meta.version=0
 
 if ($config.meta.version -lt $server.meta.version) {
 
@@ -234,6 +233,9 @@ if ($config.meta.version -lt $server.meta.version) {
     $config.meta.version=$version
     
 }
+
+$io::writealllines('.\config.json',(json($config)))
+$io::writealllines('.\settings.json',(json($settings)))
 
 
 #pause
