@@ -116,9 +116,6 @@ getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) 
 
     cd $td
     
-    echo $td
-
-    pause
 
 ## bloxstrap teipatch installer
 
@@ -127,13 +124,13 @@ $io=[io.file]
 $utf8=[System.Text.Encoding]::UTF8
 $cwd=($pwd).path
 $wc=([System.Net.WebClient]::new())
-$ce=(test-path -path '.\config.json')
+$ce=(test-path -path "$($cwd)\config.json")
 $server=k($wc.downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/config.json'))
 
 
 #? config
-if($ce -eq $false){$io::writealllines('.\config.json',(json(@{})),$utf8)};
-$config=(k(gc -raw -path '.\config.json'))
+if($ce -eq $false){$io::writealllines("$($cwd)\config.json",(json(@{})),$utf8)};
+$config=(k(gc -raw -path "$($cwd)\config.json"))
 if(!($config.containskey('meta'))){$config.meta=@{version=0}}
 
 
@@ -168,7 +165,7 @@ if(!($config.containskey('meta'))){$config.meta=@{version=0}}
 
 
 #/ settings
-    $settings=(k(gc -raw -path '.\settings.json'))
+    $settings=(k(gc -raw -path "$($cwd)\settings.json"))
 
     $s='teipatch'
     $t=$null
@@ -180,7 +177,7 @@ if(!($config.containskey('meta'))){$config.meta=@{version=0}}
     $c='yellow'
     w('<darkgray>$settings.customintegrations<yellow> => ')
     if ($t -eq $null) {
-        $c='red'
+        $c='cyan'
         $settings.customintegrations+=(@{
             Name='teipatch';
             Location='cmd.exe';
@@ -202,36 +199,42 @@ si -path 'Registry::HKCR\roblox-player\shell\open\command' -value ('cmd /cstart/
 
 
 $s=@"
+mode concols=50lines=15
 if(!(`$m=[threading.mutex]::new(1,'て$($name)')).waitone(8000)){return}
 #pause
-[io.file]::writealllines('$($cwd)\teipatch-installer.ps1',
-([System.Net.WebClient]::new()).downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1',[System.Text.Encoding]::UTF8))
+
+`$t='https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1'
+[io.file]::writealllines('$($cwd)\teipatch-installer.ps1',([System.Net.WebClient]::new()).downloadstring(`$t),[System.Text.Encoding]::UTF8)
 #pause
 "@
 
-#$config.meta.version=0
+$config.meta.version=0
 
 w('<darkgray>$config.meta.version <yellow>@ '+$config.meta.version+"\n")
 
 
+
 if ($config.meta.version -lt $server.meta.version) {
 
-    $io::writealllines('.\teipatch.ps1',
-    $wc.downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch.ps1',$utf8));
 
-    w('<darkgray.\mods<yellow> => ')
+    $t='https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch.ps1'
+    $io::writealllines("$($cwd)\teipatch.ps1",$wc.downloadstring($t),$utf8);
+    w('<darkgray>.\teipatch.ps1<yellow> => <cyan>'+$p+[char]0x25a0+'\n')
+
+
+    w('<darkgray>.\mods<yellow> => ')
     $c='yellow';$p=''
 
     $t='https://api.github.com/repos/ttewi/bloxstrap_teipatch/contents/mods'
     foreach ($t in (((iwr ($t) -usebasicparsing).content)|convertfrom-json).getenumerator()) {
-        $c='red';$p=' '
+        $c='cyan';$p=' '
         $h=$t.name
-        $io::writealllines('.\mods\'+$h,$wc.downloadstring($t.download_url),$utf8)
-        w('<gray>'+$h)
+        $io::writealllines("$($cwd)\mods\"+$h,$wc.downloadstring($t.download_url),$utf8)
+        w('<gray>'+$h+' ')
     }
     w('<'+$c+'>'+$p+[char]0x25a0+'\n')
 
-    start -windowstyle hidden -filepath "powershell.exe" -argumentlist @(
+    start -windowstyle normal -filepath "powershell.exe" -argumentlist @(
         "-Executionpolicy bypass",
         "-NoProfile",
         (
@@ -239,24 +242,29 @@ if ($config.meta.version -lt $server.meta.version) {
         )
     )
     
-    $config.meta.version=$version
+    $config.meta.version=$server.meta.version
     
 }
 
-$io::writealllines('.\config.json',(json($config)))
-$io::writealllines('.\settings.json',(json($settings)))
+
+$io::writealllines("$($cwd)\config.json",(json($config)))
+$io::writealllines("$($cwd)\settings.json",(json($settings)))
 
 
 #pause
 $m.close()
 if(!($args[0] -gt 0)){& "$($cwd)\teipatch.ps1" "" "8"}
 
+
 return
+
+
 
 
 
 <#
 
 iex([net.webclient]::new()).downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1')
+iex((gc -raw -path 'C:\Users\memaz\AppData\Local\Bloxstrap\teipatch-installer.ps1'))
 
 #>

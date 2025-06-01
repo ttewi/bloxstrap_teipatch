@@ -61,3 +61,4 @@ $io::writealllines('.\Modifications\ClientSettings\ClientAppSettings.json',(json
 w(' <white>[<yellow>'+$myinvocation.mycommand+'<white>]\n')
 
 return
+
