@@ -89,15 +89,18 @@ getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) 
 
 #/ $td
 
-
-    $td="$($env:localappdata)\bloxstrap"
-    #$td+='\a'
+    $td="$($pwd)\bloxstrap"
     if (!(test-path -path $td)) {
-        w('<yellow>' + $td + ' might not exist\n<gray>manual bloxstrap folder input srry: ')
-        
-        $td=read-host
-        w('\n\n')
+        $td="$($env:localappdata)\bloxstrap"
+        #$td+='\a'
+        if (!(test-path -path $td)) {
+            w('<yellow>' + $td + ' might not exist\n<gray>manual bloxstrap folder input srry: ')
+            
+            $td=read-host
+            w('\n\n')
+        }
     }
+
 
 
 
