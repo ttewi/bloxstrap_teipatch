@@ -208,7 +208,7 @@ if(!(`$m=[threading.mutex]::new(1,'て$($name)')).waitone(8000)){return}
 #pause
 "@
 
-$config.meta.version=0
+#$config.meta.version=0
 
 w('<darkgray>$config.meta.version <yellow>@ '+$config.meta.version+"\n")
 
