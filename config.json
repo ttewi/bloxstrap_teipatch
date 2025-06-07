@@ -1,6 +1,6 @@
 {
   "meta": {
-    "version": 2
+    "version": 3
   },
-  "FflagsOverrideLocation": ".\\fflags.jsonc"
+  "fflagsJsoncLocation": ".\\fflags.jsonc"
 }

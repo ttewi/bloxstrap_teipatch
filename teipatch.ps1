@@ -1,9 +1,10 @@
 ﻿#$host.ui.rawui.BackgroundColor="Black";
 
 # 27 13
-$cwd=($pwd).path
+$cwd=$psscriptroot
+cd $cwd
 
-mode concols=27lines=13;cd $cwd;
+mode concols=120lines=30;
 $n=[console]::title=$myinvocation.mycommand;
 if(!($mutex=[threading.mutex]::new(1,'て'+$n)).waitone(0)){return};
 
@@ -47,8 +48,15 @@ w('<gray> ╔══════════════════════�
 $io=[io.file]
 $utf8=[System.Text.Encoding]::UTF8
 
-(ls "$($cwd)\mods").Name|%{&"$($cwd)\mods\$($_)" "$($args[0])"}
-& '.\BloxStrap.exe' -player "$($args[0])"
+
+$bin='bloxstrap'
+if (test-path -path ($cwd+'\fishstrap.exe')) {$bin='fishstrap'}
+
+if ($args[0] -ne '') {$args[0]=('-player'+$args[0])}
+
+
+(ls ".\mods").Name|%{&".\mods\$($_)" "$($args[0])"}
+& ".\$($bin).exe" "$($args[0])"
 $($args[0])>.\Logs\uri.txt
 
 
@@ -63,7 +71,7 @@ if($args[1] -gt 0){for($i=0;$i -lt 1;){$t=(read-host)}}
 $n=$myinvocation.mycommand
 iex2(@"
 if(!(`$m=[threading.mutex]::new(1,'て$($n)')).waitone(8000)){return}
-& "$($pwd)\teipatch-installer.ps1" "8"
+& "$($cwd)\teipatch-installer.ps1" "8"
 #pause
 "@)
 
@@ -74,4 +82,5 @@ $mutex.close()
 
 #& ".\teipatch-installer.ps1" "8"
 return
+
 

@@ -89,29 +89,59 @@ getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) 
 
 #/ $td
 
-    $td="$($pwd)"
-    if (!(test-path -path $td)) {
-        $td="$($env:localappdata)\bloxstrap"
-        #$td+='\a'
-        if (!(test-path -path $td)) {
-            w('<yellow>' + $td + ' might not exist\n<gray>manual bloxstrap folder input srry: ')
-            
-            $td=read-host
-            w('\n\n')
+    $t=$false
+
+
+    $tbin='fishstrap'
+    if (!(test-path -path (($td="$($pwd)")+'\'+$tbin))) {
+        $td="$($env:localappdata)\$($tbin)"
+        if ((test-path -path ($td+'\'+$tbin+'.exe'))) {
+            $t=$false
+        } else {
+            $t=$true
+        }
+    }
+
+
+
+    $tbin='bloxstrap'
+    if (($t -eq $true) -and !(test-path -path (($td="$($pwd)")+'\'+$tbin))) {
+        $td="$($env:localappdata)\$($tbin)"
+        if ((test-path -path ($td+'\'+$tbin+'.exe'))) {
+            $t=$false
+        } else {
+            $t=$true
         }
     }
 
 
 
 
-    w('<gray>'+$name+'<darkcyan> => <gray>'+$td+'\blockstrap.exe')
+    if ($t -eq $true) {
+        w('<yellow>' + $td + ' might not exist\n<gray>manual bloxstrap/fishstrap folder input srry: ')
+            
+        $td=read-host
+        w('\n\n')
+    }
 
-    if (!(test-path -path ($td+'\bloxstrap.exe'))) {
+
+
+    w('<gray>'+$name+'<darkcyan> => <gray>'+$td) # +'\blockstrap.exe'
+
+    if (!(test-path -path ($td+'\bloxstrap.exe')) -and !(test-path -path ($td+'\fishstrap.exe'))) {
         w('<red> !!\n\n')
         #sleep 3;return $m.close();
         pause
         $m.close()
     }
+
+
+    $bin='bloxstrap'
+    if (test-path -path ($td+'\fishstrap.exe')) {
+        $bin='fishstrap'
+    }
+
+    w('<gray>\' + $bin + '.exe')
 
     w('<cyan> '+[char]0x221a+'\n\n')
 
@@ -119,6 +149,7 @@ getcurrent()).isinrole([security.principal.windowsbuiltinrole]::administrator)) 
 
     cd $td
     
+
 
 ## bloxstrap teipatch installer
 
@@ -224,11 +255,13 @@ if ($config.meta.version -lt $server.meta.version) {
     $io::writealllines("$($cwd)\teipatch.ps1",$wc.downloadstring($t),$utf8);
     w('<darkgray>.\teipatch.ps1<yellow> => <cyan>'+$p+[char]0x25a0+'\n')
 
+    if (!(test-path -path "$($cwd)\mods")) {
+        (md "$($cwd)\mods") > $null
+    }
 
     w('<darkgray>.\mods<yellow> => ')
     $c='yellow';$p=''
 
-    md "$($cwd)\mods"
     $t='https://api.github.com/repos/ttewi/bloxstrap_teipatch/contents/mods'
     foreach ($t in (((iwr ($t) -usebasicparsing).content)|convertfrom-json).getenumerator()) {
         $c='cyan';$p=' '
@@ -266,6 +299,7 @@ if(!($args[0] -gt 0)){
     )
 }
 
+pause
 
 return
 
