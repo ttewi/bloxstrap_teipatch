@@ -1,6 +1,6 @@
 {
+  "fflagsJsoncLocation": ".\\fflags.jsonc",
   "meta": {
     "version": 3
-  },
-  "fflagsJsoncLocation": ".\\fflags.jsonc"
+  }
 }

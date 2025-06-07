@@ -52,11 +52,12 @@ $utf8=[System.Text.Encoding]::UTF8
 $bin='bloxstrap'
 if (test-path -path ($cwd+'\fishstrap.exe')) {$bin='fishstrap'}
 
-if ($args[0] -ne '') {$args[0]=('-player'+$args[0])}
+$player=''
+if (($args[0] -ne $null) -and ($args[0] -ne '')) {$player='-player'}
 
 
 (ls ".\mods").Name|%{&".\mods\$($_)" "$($args[0])"}
-& ".\$($bin).exe" "$($args[0])"
+& ".\$($bin).exe" ($player) "$($args[0])"
 $($args[0])>.\Logs\uri.txt
 
 
@@ -71,7 +72,7 @@ if($args[1] -gt 0){for($i=0;$i -lt 1;){$t=(read-host)}}
 $n=$myinvocation.mycommand
 iex2(@"
 if(!(`$m=[threading.mutex]::new(1,'て$($n)')).waitone(8000)){return}
-& "$($cwd)\teipatch-installer.ps1" "8"
+& "$($pwd)\teipatch-installer.ps1" "8"
 #pause
 "@)
 

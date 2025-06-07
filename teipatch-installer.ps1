@@ -299,7 +299,7 @@ if(!($args[0] -gt 0)){
     )
 }
 
-pause
+
 
 return
 
@@ -310,6 +310,6 @@ return
 <#
 
 iex([net.webclient]::new()).downloadstring('https://raw.githubusercontent.com/ttewi/bloxstrap_teipatch/refs/heads/main/teipatch-installer.ps1')
-iex((gc -raw -path 'C:\Users\memaz\AppData\Local\Bloxstrap\teipatch-installer.ps1'))
+iex((gc -raw -path 'C:\Users\memaz\AppData\Local\Fishstrap\teipatch-installer.ps1'))
 
 #>

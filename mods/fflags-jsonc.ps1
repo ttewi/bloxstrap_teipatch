@@ -39,7 +39,7 @@
     function json($o){return ($o|convertto-json|format-json)}
 
 
-;## fflags .jsonc :3 srry
+## fflags .jsonc :3 srry
 
 $config=(k(gc -raw -path '.\config.json'))
 
@@ -47,10 +47,11 @@ $t=$config.fflagsJsoncLocation
 if(($t -eq $null) -or (!(test-path -path $t))) {
     $config.fflagsJsoncLocation='.\fflags.jsonc';
     $io::writealllines('.\config.json',(json($config)));
+    $io::writealllines('.\fflags.jsonc',(json(@{})))
 }
 
 $t=$config.fflagsJsoncLocation
-if(!(test-path -path $t)){w(' <red>!! <white>[<yellow>'+$myinvocation.mycommand+'<white>]\n');return}
+if(!(test-path -path $t)){w(' <white>[<yellow>'+$myinvocation.mycommand+'<white>] <red>!!\n');return}
 
 
 $n=k((gc -raw -Path $t)-replace'(?m)(?<=^([^"]|"[^"]*")*)//.*'-replace'(?ms)/\*.*?\*/')
@@ -61,4 +62,5 @@ $io::writealllines('.\Modifications\ClientSettings\ClientAppSettings.json',(json
 w(' <white>[<yellow>'+$myinvocation.mycommand+'<white>]\n')
 
 return
+
 
